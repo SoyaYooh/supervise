@@ -1,17 +1,31 @@
 package ${entity.packageName}.mapper;
 
-import ${entity.packageName}.dto.${entity.table.entityName} ;
+import ${entity.packageName}.dto.${entity.table.entityName};
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+<#if property.ormType??>
+	<#if property.ormType=="mybatis"||property.ormType=="jpa">
+		<#if property.ormType=="mybatis">
 import com.github.pagehelper.Page;
+		</#if>
 import org.springframework.data.domain.Pageable;
+	</#if>
+	<#if property.ormType=="mybatis-plus">
+import com.linkcheers.supervise.SuperMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+	</#if>
+</#if>
+
 /**
  * @author ${entity.author}
  * @date ${entity.date}
  * @description
  */
 @Mapper
-public  interface ${entity.table.entityName}Mapper{
-
+public  interface ${entity.table.entityName}Mapper<#if property.ormType??><#if property.ormType=="mybatis-plus"> extends SuperMapper<${entity.table.entityName}}></#if></#if>{
+<#if property.ormType??>
+	<#if property.ormType=="mybatis">
 	/**
 	 * 新增<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>数据
 	 * @param  vo
@@ -38,7 +52,7 @@ public  interface ${entity.table.entityName}Mapper{
 	 * @param  vo
 	 * @return
      */
-    ${entity.table.entityName} get${entity.table.entityName}(${entity.table.entityName} vo);
+${entity.table.entityName} get${entity.table.entityName}(${entity.table.entityName} vo);
 
     /**
 	 * 查询<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>列表
@@ -56,4 +70,6 @@ public  interface ${entity.table.entityName}Mapper{
 	 * @return
      */
      Integer get${entity.table.entityName}Count(${entity.table.entityName} vo);
+	</#if>
+</#if>
 }

@@ -11,14 +11,16 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+<#if property.ormType??>
 <#if property.ormType=="jpa">
 import java.util.UUID;
 </#if>
-<#if property.ormType=="mybatis">
+<#if property.ormType=="mybatis-plus">
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+</#if>
 </#if>
 /**
  * @author ${entity.author}
@@ -40,20 +42,22 @@ public class ${entity.table.entityName} extends BaseDto<${entity.table.entityNam
 	 */
     </#if>
     <#if property.isKey=="true">
+        <#if property.ormType??>
         <#if property.ormType=="jpa">
     @Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid")
         </#if>
-        <#if property.ormType=="mybatis">
+        <#if property.ormType=="mybatis-plus">
  	@TableId(value = "ID",type= IdType.UUID)
         </#if>
     </#if>
-    <#if property.ormType=="mybatis">
+    <#if property.ormType=="mybatis-plus">
     @TableField(value = "${property.columnName}")
     </#if>
     <#if property.ormType=="jpa">
     @Column(name = "${property.columnName}")
+    </#if>
     </#if>
     private ${property.fieldType} ${property.fieldName};
 </#list>

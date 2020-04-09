@@ -1,6 +1,5 @@
 package ${entity.packageName};
 
-import java.util.UUID;
 import com.common.dto.ResultMsg;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,22 @@ import ${entity.packageName}.dto.${entity.table.entityName};
 import ${entity.packageName}.service.I${entity.table.entityName}Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+<#if property.ormType??>
+    <#if property.ormType=="mybatis"||property.ormType=="jpa">
+import java.util.UUID;
+        <#if property.ormType=="mybatis">
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+        </#if>
 import org.springframework.data.domain.Pageable;
+    </#if>
+    <#if property.ormType=="mybatis-plus">
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.linkcheers.supervise.service.BaseService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+    </#if>
+</#if>
 /**
  * @author ${entity.author}
  * @date ${entity.date}
