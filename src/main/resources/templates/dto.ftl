@@ -11,8 +11,15 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+<#if property.ormType=="jpa">
 import java.util.UUID;
-
+</#if>
+<#if property.ormType=="mybatis">
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+</#if>
 /**
  * @author ${entity.author}
  * @date ${entity.date}
@@ -24,8 +31,7 @@ import java.util.UUID;
 </#if>
 @Entity
 @Table(name = "${entity.table.tableName}")
-public class ${entity.table.entityName} extends OriginalDto<${entity.table.entityName}>{
-    private static final long serialVersionUID = 1L;
+public class ${entity.table.entityName} extends BaseDto<${entity.table.entityName}>{
  /********** 属性 ***********/
 <#list entity.table.cloumns as property>
     <#if property.comment?exists>
@@ -34,11 +40,21 @@ public class ${entity.table.entityName} extends OriginalDto<${entity.table.entit
 	 */
     </#if>
     <#if property.isKey=="true">
+        <#if property.ormType=="jpa">
     @Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid")
+        </#if>
+        <#if property.ormType=="mybatis">
+ 	@TableId(value = "ID",type= IdType.UUID)
+        </#if>
     </#if>
+    <#if property.ormType=="mybatis">
+    @TableField(value = "${property.columnName}")
+    </#if>
+    <#if property.ormType=="jpa">
     @Column(name = "${property.columnName}")
+    </#if>
     private ${property.fieldType} ${property.fieldName};
 </#list>
 <#if entity.isLombok?exists>
@@ -54,25 +70,4 @@ public class ${entity.table.entityName} extends OriginalDto<${entity.table.entit
         </#list>
     </#if>
 </#if>
-	@Override
-	public void preInsert() {
-		if (getIsNewRecord()) {
-			String uuId = UUID.randomUUID().toString();
-			setId(uuId);
-		}
-	}
-
-	@Override
-	public void preInsert(Long id) {
-		if (getIsNewRecord()) {
-			setId(String.valueOf(id));
-		}
-	}
-
-	@Transient
-	@JsonIgnore
-	@Override
-	public boolean getIsNewRecord() {
-		return isNewRecord || StringUtils.isBlank(getId());
-	}
 }

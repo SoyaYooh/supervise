@@ -1,5 +1,6 @@
 package com.linkcheers.supervise.dto;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 
@@ -14,19 +15,14 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class BaseDto<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@Transient
-	@TableField(value = "create_time", strategy = FieldStrategy.NOT_EMPTY)
+	@TableField(value = "create_time", fill = FieldFill.INSERT)
 	protected Date createTime;
-	@Transient
-	@TableField(value = "create_user", strategy = FieldStrategy.NOT_EMPTY)
+	@TableField(value = "create_user", fill = FieldFill.INSERT)
 	protected String createUser;
-	@Transient
-	@TableField(value = "edit_time", strategy = FieldStrategy.NOT_EMPTY)
+	@TableField(value = "edit_time", fill = FieldFill.UPDATE)
 	protected Date editTime;
-	@Transient
-	@TableField(value = "edit_user", strategy = FieldStrategy.NOT_EMPTY)
+	@TableField(value = "edit_user", fill = FieldFill.UPDATE)
 	protected String editUser;
-
 
 	public Date getCreateTime() {
 		return createTime;

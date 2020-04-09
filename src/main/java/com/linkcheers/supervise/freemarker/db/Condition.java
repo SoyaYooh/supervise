@@ -48,6 +48,10 @@ public class Condition {
 	 */
 	private String userName;
 	/**
+	 * 持久层框架类型
+	 */
+	private String  ormType;
+	/**
 	 * 数据库密码
 	 */
 	private String passWord;
@@ -152,5 +156,13 @@ public class Condition {
 		formatter.format(new Date());
 		this.date = formatter.format(new Date());
 		this.isLombok = "N";;
+	}
+
+	public String getOrmType() {
+		return ormType;
+	}
+
+	public void setOrmType(String ormType) {
+		this.ormType = ormType;
 	}
 }
