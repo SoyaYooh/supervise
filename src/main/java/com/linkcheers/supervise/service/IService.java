@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 通用接口
@@ -24,8 +25,7 @@ public interface IService<T,E> {
 
 	int updateByCondition(T entity,Wrapper<T> updateWrapper) ;
 
-	public IPage<T> selectPageByCondition(Page<T> page , QueryWrapper<T> selectWrapper);
-
 	public IPage<T> selectPage(Page<T> page , QueryWrapper<T> selectWrapper);
 
+	public List<T> selectList(QueryWrapper<T> selectWrapper);
 }
