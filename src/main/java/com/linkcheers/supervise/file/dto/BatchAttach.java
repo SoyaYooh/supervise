@@ -56,7 +56,7 @@ public class BatchAttach extends BaseDto<BatchAttach> {
 	private String ftpPath;
 
 
-	@TableField(value = "SIZE")
+	@TableField(value = "ATTACH_SIZE")
 	@Excel(name = "附件大小")
-	private String size;
+	private String attachSize;
 }
