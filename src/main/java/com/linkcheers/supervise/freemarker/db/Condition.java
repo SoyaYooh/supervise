@@ -52,6 +52,10 @@ public class Condition {
 	 */
 	private String  ormType;
 	/**
+	 * 持久层框架类型
+	 */
+	private String  isSwagger;
+	/**
 	 * 数据库密码
 	 */
 	private String passWord;
@@ -155,7 +159,15 @@ public class Condition {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		formatter.format(new Date());
 		this.date = formatter.format(new Date());
-		this.isLombok = "N";;
+		this.isLombok = "N";
+	}
+
+	public String getIsSwagger() {
+		return isSwagger;
+	}
+
+	public void setIsSwagger(String isSwagger) {
+		this.isSwagger = isSwagger;
 	}
 
 	public String getOrmType() {

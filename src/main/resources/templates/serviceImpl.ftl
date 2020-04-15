@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 import ${entity.packageName}.dto.${entity.table.entityName};
 import ${entity.packageName}.mapper.${entity.table.entityName}Mapper;
 import ${entity.packageName}.service.I${entity.table.entityName}Service;
-<#if property.ormType??>
-    <#if property.ormType=="mybatis"||property.ormType=="jpa">
-        <#if property.ormType=="mybatis">
+<#if entity.ormType??>
+    <#if entity.ormType=="mybatis"||entity.ormType=="jpa">
+        <#if entity.ormType=="mybatis">
 import com.github.pagehelper.Page;
         </#if>
 import org.springframework.data.domain.Pageable;
     </#if>
-    <#if property.ormType=="mybatis-plus">
+    <#if entity.ormType=="mybatis-plus">
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linkcheers.supervise.service.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,8 +26,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @description
  */
 @Service
-public class ${entity.table.entityName}ServiceImpl implements I${entity.table.entityName}Service<#if property.ormType=="mybatis-plus"> extends BaseService<${entity.table.entityName},${entity.table.entityName}Mapper></#if>{
-<#if property.ormType=="mybatis">
+public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-plus"> extends BaseService<${entity.table.entityName},${entity.table.entityName}Mapper></#if> implements I${entity.table.entityName}Service{
+<#if entity.ormType=="mybatis">
 	@Autowired
 	private ${entity.table.entityName}Mapper mapper;
 

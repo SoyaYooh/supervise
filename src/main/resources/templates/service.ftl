@@ -1,13 +1,14 @@
 package ${entity.packageName}.service;
 
-<#if property.ormType??>
-	<#if property.ormType=="mybatis"||property.ormType=="jpa">
-		<#if property.ormType=="mybatis">
+<#if entity.ormType??>
+	<#if entity.ormType=="mybatis"||entity.ormType=="jpa">
+		<#if entity.ormType=="mybatis">
 import com.github.pagehelper.Page;
 		</#if>
 import org.springframework.data.domain.Pageable;
 	</#if>
-	<#if property.ormType=="mybatis-plus">
+	<#if entity.ormType=="mybatis-plus">
+import ${entity.packageName}.dto.${entity.table.entityName}Mapper;
 import com.linkcheers.supervise.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,9 +20,9 @@ import ${entity.packageName}.dto.${entity.table.entityName};
  * @date ${entity.date}
  * @description
  */
-public  interface I${entity.table.entityName}Service<#if property.ormType??><#if property.ormType=="mybatis-plus"> extends IService<${entity.table.entityName},${entity.table.entityName}Mapper></#if></#if>{
-<#if property.ormType??>
-<#if property.ormType=="mybatis">
+public  interface I${entity.table.entityName}Service<#if entity.ormType??><#if entity.ormType=="mybatis-plus"> extends IService<${entity.table.entityName},${entity.table.entityName}Mapper></#if></#if>{
+<#if entity.ormType??>
+<#if entity.ormType=="mybatis">
     /**
 	 * 新增<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>接口
 	 * @param  vo

@@ -10,16 +10,16 @@ import ${entity.packageName}.dto.${entity.table.entityName};
 import ${entity.packageName}.service.I${entity.table.entityName}Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-<#if property.ormType??>
-    <#if property.ormType=="mybatis"||property.ormType=="jpa">
+<#if entity.ormType??>
+    <#if entity.ormType=="mybatis"||entity.ormType=="jpa">
 import java.util.UUID;
-        <#if property.ormType=="mybatis">
+        <#if entity.ormType=="mybatis">
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
         </#if>
 import org.springframework.data.domain.Pageable;
     </#if>
-    <#if property.ormType=="mybatis-plus">
+    <#if entity.ormType=="mybatis-plus">
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linkcheers.supervise.service.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;

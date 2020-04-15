@@ -1,0 +1,295 @@
+package com.linkcheers.supervise.freemarker;
+
+import com.linkcheers.supervise.freemarker.db.Cloumns;
+import com.linkcheers.supervise.freemarker.db.Condition;
+import com.linkcheers.supervise.freemarker.db.Table;
+import com.linkcheers.supervise.freemarker.schema.DataSourceHandle;
+import com.linkcheers.supervise.freemarker.schema.OracleHandle;
+import com.linkcheers.supervise.freemarker.schema.StrategyFactory;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ubh extends JFrame {
+	public JPanel jkin;
+	public JLabel 用户名;
+	public JTextField userName;
+	public JButton 解析;
+	public JComboBox type;
+	public JLabel 表名;
+	public JButton 生成;
+	public JTextField tableName;
+	public JTextField passWord;
+	public JLabel 数据库类型;
+	public JLabel 密码;
+	public JLabel 地址;
+	public JTextField url;
+	public JTable table1;
+	public JScrollPane js;
+
+
+	public ubh() {
+		$$$setupUI$$$();
+		解析.addActionListener(new ActionListener() {
+			/**
+			 * Invoked when an action occurs.
+			 *
+			 * @param e
+			 */
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Table tables = new Table();
+				System.out.print("dd");
+				Object types = type.getSelectedItem();
+				String urls = "120.27.144.145:1521:ORCL";
+//						url.getText();
+				String userNames = "supervision";
+				//userName.getText();
+				String passWordss = "lq_supervision";
+				//passWord.getText();
+				String tableNames = "SYSTEM_ROLE";
+				//tableName.getText();
+				new OracleHandle().init(urls, userNames, passWordss);
+				if ("Oracle".equals(types)) {
+					tables = new OracleHandle().getTableCloumns(tableNames);
+					System.out.print("dwdw");
+				}
+			/*	DefaultTableModel dtmDemo = (DefaultTableModel) table1.getModel();
+				String[] tableHeads = {"字段名称", "类型", "描述", "=", ">", "<", "like", "sort"};
+				dtmDemo.setColumnIdentifiers(tableHeads);
+				table1.setColumnSelectionAllowed(true);
+				table1.setCellSelectionEnabled(true);
+				table1.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+				table1.getColumnModel().getColumn(3).setCellRenderer(new MyTableRenderer());
+				table1.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+				table1.getColumnModel().getColumn(4).setCellRenderer(new MyTableRenderer());
+				table1.getColumnModel().getColumn(5).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+				table1.getColumnModel().getColumn(5).setCellRenderer(new MyTableRenderer());
+				table1.getColumnModel().getColumn(6).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+				table1.getColumnModel().getColumn(6).setCellRenderer(new MyTableRenderer());
+				table1.getColumnModel().getColumn(7).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+				table1.getColumnModel().getColumn(7).setCellRenderer(new MyTableRenderer());
+				for (int i = 0; i < tables.getCloumns().size(); i++) {
+					Object[] objdata = {tables.getCloumns().get(i).getColumnName(), tables.getCloumns().get(i).getDataType(), tables.getCloumns().get(i).getComment()};
+					dtmDemo.addRow(objdata);
+				}*/
+				initTable(table1, tables.getCloumns());
+			}
+		});
+
+	}
+	//生成表格数据
+
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("ubh");
+		frame.setContentPane(new ubh().jkin);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+
+	private JTable initTable(JTable table, java.util.List<Cloumns> lt) {
+		DefaultTableModel dtm = new DefaultTableModel(
+				new Object[]{"=", ">=", "<=", "like", "字段名称", "类型", "描述"}, 0);
+		table.setModel(dtm);
+		TableColumnModel tcm = table.getColumnModel();
+		tcm.getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		tcm.getColumn(0).setCellRenderer(new MyTableRenderer());
+		tcm.getColumn(1).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		tcm.getColumn(1).setCellRenderer(new MyTableRenderer());
+		tcm.getColumn(2).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		tcm.getColumn(2).setCellRenderer(new MyTableRenderer());
+		tcm.getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		tcm.getColumn(3).setCellRenderer(new MyTableRenderer());
+		for (int i = 0; i < lt.size(); i++) {
+			Object[] objdata = {
+					new Boolean(false),
+					new Boolean(false),
+					new Boolean(false),
+					new Boolean(false),
+					lt.get(i).getColumnName(),
+					lt.get(i).getDataType(), lt.get(i).getComment()
+
+
+			};
+			dtm.addRow(objdata);
+		}
+		JScrollPane js = new JScrollPane(table);
+		jkin.add(js);
+		return table;
+	}
+
+	private void createUIComponents() {
+		// TODO: place custom component creation code here
+	}
+
+	/**
+	 * Method generated by IntelliJ IDEA GUI Designer
+	 * >>> IMPORTANT!! <<<
+	 * DO NOT edit this method OR call it in your code!
+	 *
+	 * @noinspection ALL
+	 */
+	private void $$$setupUI$$$() {
+		jkin = new JPanel();
+		jkin.setLayout(new GridBagLayout());
+		jkin.setMinimumSize(new Dimension(925, 600));
+		jkin.setPreferredSize(new Dimension(925, 500));
+		用户名 = new JLabel();
+		用户名.setText("用户名");
+		GridBagConstraints gbc;
+		gbc = new GridBagConstraints();
+		gbc.gridx = 4;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		jkin.add(用户名, gbc);
+		密码 = new JLabel();
+		密码.setHorizontalAlignment(0);
+		密码.setHorizontalTextPosition(0);
+		密码.setText("密码");
+		密码.setVerticalAlignment(3);
+		密码.setVerticalTextPosition(1);
+		gbc = new GridBagConstraints();
+		gbc.gridx = 6;
+		gbc.gridy = 0;
+		jkin.add(密码, gbc);
+		解析 = new JButton();
+		解析.setText("解析");
+		gbc = new GridBagConstraints();
+		gbc.gridx = 10;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		jkin.add(解析, gbc);
+		表名 = new JLabel();
+		表名.setText("表名");
+		gbc = new GridBagConstraints();
+		gbc.gridx = 8;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		jkin.add(表名, gbc);
+		生成 = new JButton();
+		生成.setText("生成");
+		gbc = new GridBagConstraints();
+		gbc.gridx = 11;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		jkin.add(生成, gbc);
+		数据库类型 = new JLabel();
+		数据库类型.setHorizontalAlignment(2);
+		数据库类型.setHorizontalTextPosition(2);
+		数据库类型.setText("数据库类型");
+		数据库类型.setVerticalAlignment(0);
+		数据库类型.setVerticalTextPosition(1);
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		jkin.add(数据库类型, gbc);
+		userName = new JTextField();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 5;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.ipadx = 100;
+		jkin.add(userName, gbc);
+		tableName = new JTextField();
+		tableName.setText("");
+		gbc = new GridBagConstraints();
+		gbc.gridx = 9;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.ipadx = 100;
+		jkin.add(tableName, gbc);
+		地址 = new JLabel();
+		地址.setText("地址");
+		gbc = new GridBagConstraints();
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		jkin.add(地址, gbc);
+		url = new JTextField();
+		url.setText("");
+		gbc = new GridBagConstraints();
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.ipadx = 100;
+		jkin.add(url, gbc);
+		passWord = new JTextField();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 7;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.ipadx = 100;
+		jkin.add(passWord, gbc);
+		type = new JComboBox();
+		final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+		defaultComboBoxModel1.addElement("Oracle");
+		defaultComboBoxModel1.addElement("Mysql");
+		defaultComboBoxModel1.addElement("SqlServer");
+		type.setModel(defaultComboBoxModel1);
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		jkin.add(type, gbc);
+		final JPanel spacer1 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		jkin.add(spacer1, gbc);
+		table1 = new JTable();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.gridwidth = 12;
+		gbc.fill = GridBagConstraints.BOTH;
+		jkin.add(table1, gbc);
+		js = new JScrollPane();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 12;
+		gbc.gridy = 2;
+		gbc.fill = GridBagConstraints.BOTH;
+		jkin.add(js, gbc);
+	}
+
+	/**
+	 * @noinspection ALL
+	 */
+	public JComponent $$$getRootComponent$$$() {
+		return jkin;
+	}
+
+	private class MyTableRenderer extends JCheckBox implements TableCellRenderer {
+		//此方法可以查考JDK文档的说明
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+													   Object value,
+													   boolean isSelected,
+													   boolean hasFocus,
+													   int row,
+													   int column) {
+			Boolean b = (Boolean) value;
+			this.setSelected(b.booleanValue());
+			return this;
+		}
+	}
+}

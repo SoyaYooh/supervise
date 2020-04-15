@@ -6,7 +6,7 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.linkcheers.supervise.dto.ResultMsg;
-import com.linkcheers.supervise.file.FileUtil;
+import com.linkcheers.supervise.file.util.FileClient;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -127,7 +127,7 @@ public abstract class BaseController<T> {
 	public ResultMsg upload(MultipartFile file) {
 		ResultMsg result = new ResultMsg();
 		try {
-			FileUtil.uploadFile(file, uploadPath, file.getName());
+			FileClient.uploadFile(file, uploadPath, file.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setStatus(false);
@@ -146,7 +146,7 @@ public abstract class BaseController<T> {
 	@ResponseBody
 	public void downLoad(HttpServletResponse response, String fileName) {
 		try {
-			FileUtil.download(response, downLoadPath, fileName);
+			FileClient.download(response, downLoadPath, fileName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

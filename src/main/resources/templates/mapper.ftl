@@ -3,14 +3,14 @@ package ${entity.packageName}.mapper;
 import ${entity.packageName}.dto.${entity.table.entityName};
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-<#if property.ormType??>
-	<#if property.ormType=="mybatis"||property.ormType=="jpa">
-		<#if property.ormType=="mybatis">
+<#if entity.ormType??>
+	<#if entity.ormType=="mybatis"||entity.ormType=="jpa">
+		<#if entity.ormType=="mybatis">
 import com.github.pagehelper.Page;
 		</#if>
 import org.springframework.data.domain.Pageable;
 	</#if>
-	<#if property.ormType=="mybatis-plus">
+	<#if entity.ormType=="mybatis-plus">
 import com.linkcheers.supervise.SuperMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,9 +23,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @description
  */
 @Mapper
-public  interface ${entity.table.entityName}Mapper<#if property.ormType??><#if property.ormType=="mybatis-plus"> extends SuperMapper<${entity.table.entityName}}></#if></#if>{
-<#if property.ormType??>
-	<#if property.ormType=="mybatis">
+public  interface ${entity.table.entityName}Mapper<#if entity.ormType??><#if entity.ormType=="mybatis-plus"> extends SuperMapper<${entity.table.entityName}></#if></#if>{
+<#if entity.ormType??>
+	<#if entity.ormType=="mybatis">
 	/**
 	 * 新增<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>数据
 	 * @param  vo

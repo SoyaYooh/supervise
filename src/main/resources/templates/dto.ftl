@@ -4,18 +4,20 @@ package ${entity.packageName}.dto;
 import lombok.Data;
     </#if>
 </#if>
-import com.common.dto.OriginalDto;
+import com.linkcheers.supervise.dto.BaseDto;
+<#--<#if entity.isSwagger?exists>
+    <#if entity.isSwagger=="Y">
+import io.swagger.annotations.ApiModelProperty;
+    </#if>
+</#if>-->
+import java.util.Date;
+<#if entity.ormType??>
+<#if entity.ormType=="jpa">
 import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-<#if property.ormType??>
-<#if property.ormType=="jpa">
 import java.util.UUID;
 </#if>
-<#if property.ormType=="mybatis-plus">
+<#if entity.ormType=="mybatis-plus">
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -24,15 +26,22 @@ import com.baomidou.mybatisplus.annotation.TableName;
 </#if>
 /**
  * @author ${entity.author}
- * @date ${entity.date}
+ * @date   ${.now}
  */
 <#if entity.isLombok?exists>
     <#if entity.isLombok=="Y">
 @Data
     </#if>
 </#if>
+<#if entity.ormType?exists>
+    <#if entity.ormType=="jpa">
 @Entity
 @Table(name = "${entity.table.tableName}")
+    </#if>
+    <#if entity.ormType=="mybatis-plus">
+@TableName("${entity.table.tableName}")
+    </#if>
+</#if>
 public class ${entity.table.entityName} extends BaseDto<${entity.table.entityName}>{
  /********** 属性 ***********/
 <#list entity.table.cloumns as property>
@@ -42,23 +51,32 @@ public class ${entity.table.entityName} extends BaseDto<${entity.table.entityNam
 	 */
     </#if>
     <#if property.isKey=="true">
-        <#if property.ormType??>
-        <#if property.ormType=="jpa">
+        <#if entity.ormType?exists>
+            <#if entity.ormType=="jpa">
     @Id
-	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid")
+	@GeneratedValue(generator = "uuid")
+            </#if>
+            <#if entity.ormType=="mybatis-plus">
+   @TableId(value = "${property.columnName}",type= IdType.UUID)
+            </#if>
         </#if>
-        <#if property.ormType=="mybatis-plus">
- 	@TableId(value = "ID",type= IdType.UUID)
+    </#if>
+    <#if property.isKey=="false">
+        <#if entity.ormType?exists>
+            <#if entity.ormType=="jpa">
+   	@Column(name = "${property.columnName}")
+            </#if>
+            <#if entity.ormType=="mybatis-plus">
+  	@TableField(value = "${property.columnName}")
+            </#if>
         </#if>
     </#if>
-    <#if property.ormType=="mybatis-plus">
-    @TableField(value = "${property.columnName}")
-    </#if>
-    <#if property.ormType=="jpa">
-    @Column(name = "${property.columnName}")
-    </#if>
-    </#if>
+<#--    <#if entity.isSwagger?exists>
+        <#if entity.isSwagger=="Y">
+    @ApiModelProperty(value = "${property.columnName}")
+        </#if>
+    </#if>-->
     private ${property.fieldType} ${property.fieldName};
 </#list>
 <#if entity.isLombok?exists>
