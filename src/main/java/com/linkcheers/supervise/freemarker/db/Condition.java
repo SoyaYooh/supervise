@@ -64,6 +64,13 @@ public class Condition {
 	 */
 	private String isFilePath;
 
+    private String method;
+
+	/**
+	 * 开发框架
+	 */
+	private String frameType;
+
 	public String getPackageName() {
 		return packageName;
 	}
@@ -176,5 +183,21 @@ public class Condition {
 
 	public void setOrmType(String ormType) {
 		this.ormType = ormType;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public String getFrameType() {
+		return frameType;
+	}
+
+	public void setFrameType(String frameType) {
+		this.frameType = frameType;
 	}
 }

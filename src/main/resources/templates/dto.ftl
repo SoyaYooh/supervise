@@ -4,12 +4,15 @@ package ${entity.packageName}.dto;
 import lombok.Data;
     </#if>
 </#if>
-import com.linkcheers.supervise.dto.BaseDto;
-<#--<#if entity.isSwagger?exists>
+<#if entity.frameType?exists>
+<#if entity.frameType=="standard">import com.linkcheers.supervise.dto.BaseDto;</#if>
+<#if entity.frameType=="tree">import com.linkcheers.supervise.dto.BaseTree;</#if>
+</#if>
+<#if entity.isSwagger?exists>
     <#if entity.isSwagger=="Y">
 import io.swagger.annotations.ApiModelProperty;
     </#if>
-</#if>-->
+</#if>
 import java.util.Date;
 <#if entity.ormType??>
 <#if entity.ormType=="jpa">
@@ -42,7 +45,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 @TableName("${entity.table.tableName}")
     </#if>
 </#if>
-public class ${entity.table.entityName} extends BaseDto<${entity.table.entityName}>{
+public class ${entity.table.entityName}<#if entity.frameType?exists><#if entity.frameType=="standard"><#if entity.ormType?exists> <#if entity.ormType=="mybatis-plus"> extends BaseDto<${entity.table.entityName}></#if></#if></#if><#if entity.frameType=="tree"> extends BaseTree<${entity.table.entityName}></#if></#if>{
  /********** 属性 ***********/
 <#list entity.table.cloumns as property>
     <#if property.comment?exists>
@@ -72,11 +75,11 @@ public class ${entity.table.entityName} extends BaseDto<${entity.table.entityNam
             </#if>
         </#if>
     </#if>
-<#--    <#if entity.isSwagger?exists>
+    <#if entity.isSwagger?exists>
         <#if entity.isSwagger=="Y">
     @ApiModelProperty(value = "${property.columnName}")
         </#if>
-    </#if>-->
+    </#if>
     private ${property.fieldType} ${property.fieldName};
 </#list>
 <#if entity.isLombok?exists>

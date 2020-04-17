@@ -74,7 +74,7 @@ public class MySqlHandle implements DataSourceHandle, InitializingBean {
 				cloumns.setComment(rs.getString("column_comment"));
 				cloumns.setIsKey(StringUtils.isEmpty(rs.getString("column_key")) ? "false" : "true");
 				cloumns.setNotNull(rs.getString("is_nullable").equals("YES") ? "false" : "true");
-				cloumns.setComments(rs.getString("column_comment"));
+				//cloumns.setComments(rs.getString("column_comment"));
 				cloumns.setFieldName(Convert.fieldToProperty(rs.getString("column_name")));
 				cloumns.setFieldType(Convert.processTypeOracleConvert(rs.getString("data_type")).getType());
 				cloumns.setJdbcType(Convert.processTypeJdbcConvert(rs.getString("data_type")).getType());

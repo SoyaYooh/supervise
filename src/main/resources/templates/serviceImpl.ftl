@@ -14,6 +14,7 @@ import com.github.pagehelper.Page;
 import org.springframework.data.domain.Pageable;
     </#if>
     <#if entity.ormType=="mybatis-plus">
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.linkcheers.supervise.service.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -27,66 +28,109 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  */
 @Service
 public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-plus"> extends BaseService<${entity.table.entityName},${entity.table.entityName}Mapper></#if> implements I${entity.table.entityName}Service{
-<#if entity.ormType=="mybatis">
+<#if entity.method??>
 	@Autowired
-	private ${entity.table.entityName}Mapper mapper;
-
+	private ${entity.table.entityName}Mapper ${entity.table.entityName?uncap_first}mapper;
+    <#if entity.method?contains("add")>
 	@Override
 	public void add${entity.table.entityName}(${entity.table.entityName} vo) {
 		try {
-            vo.preInsert();
-			mapper.add${entity.table.entityName}(vo);
+
+            if(vo.getId()){
+        <#if entity.ormType??>
+            <#if entity.ormType=="mybatis-plus">
+                this.mapper.insert(vo>);
+            </#if>
+        </#if>
+            }else{
+        <#if entity.ormType??>
+            <#if entity.ormType=="mybatis-plus">
+                ${entity.table.entityName} ${entity.table.entityName?uncap_first}=new ${entity.table.entityName}();
+            	UpdateWrapper<${entity.table.entityName}> updateWrapper = new UpdateWrapper<>();
+                <#list entity.table.cloumns as cloumns>
+                    <#if cloumns.columnName??>
+                if(StringUtils.isNotBlank(vo.get${cloumns.fieldName}())){
+                        ${entity.table.entityName?uncap_first}.set${cloumns.fieldName}(vo.get${cloumns.fieldName}());
+                 }
+                    </#if>
+                </#list>
+				updateWrapper.eq("ID", smsSportCheck.getId());
+                this.mapper.update(vo>);
+            </#if>
+        </#if>
+            }
 		} catch (Exception e) {
-			e.printStackTrace();
+				e.printStackTrace();
+			throw e;
 		}
 	}
-
-	@Override
-	public  void edit${entity.table.entityName}(${entity.table.entityName} vo) {
-		try {
-			mapper.edit${entity.table.entityName}(vo);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+   </#if>
+    <#if entity.method?contains("delete")>
 	@Override
 	public void remove${entity.table.entityName}(${entity.table.entityName} vo) {
 		try {
-			mapper.remove${entity.table.entityName}(vo);
+        <#if entity.ormType??>
+            <#if entity.ormType=="mybatis-plus">
+                ${entity.table.entityName?uncap_first}=this.mapper.delete(new QueryWrapper<${entity.table.entityName}>());
+            </#if>
+        </#if>
 		} catch (Exception e) {
-			e.printStackTrace();
+				e.printStackTrace();
+			throw e;
 		}
 	}
-
+    </#if>
+    <#if entity.method?contains("query")>
 	@Override
-	public Page<${entity.table.entityName}> get${entity.table.entityName}List(${entity.table.entityName} vo,Pageable pageable) {
+	public IPage<${entity.table.entityName}> get${entity.table.entityName}List(${entity.table.entityName} vo,Page page) {
+     IPage<${entity.table.entityName}> IPage;
        try {
-           return mapper.get${entity.table.entityName}List(vo,pageable);
+        <#if entity.ormType??>
+            <#if entity.ormType=="mybatis-plus">
+            QueryWrapper<${entity.table.entityName}> wrapper=new QueryWrapper<>();
+                <#list entity.table.cloumns as cloumns>
+                    <#if cloumns.rule??>
+                        <#list cloumns.rule as rule>
+                        if(StringUtils.isNotBlank(vo.get${cloumns.fieldName}())){
+                          wrapper.${rule}("${cloumns.columnName}",vo.get${cloumns.fieldName}());
+                        }
+                        </#list>
+                    </#if>
+                </#list>
+                <#list entity.table.cloumns as cloumns>
+                    <#if cloumns.rule??>
+                        <#list cloumns.rule as rule>
+                            <#if rule=='sort'>
+            wrapper.orderBy("${cloumns.columnName}");
+                            </#if>
+                        </#list>
+                    </#if>
+                </#list>
+           IPage=this.mapper.selectPage(page,wrapper);
+           </#if>
+        </#if>
        } catch (Exception e) {
-           e.printStackTrace();
+          	e.printStackTrace();
+			throw e;
        }
-       return null;
+      return IPage;
     }
-
     @Override
     public ${entity.table.entityName} get${entity.table.entityName}(${entity.table.entityName} vo) {
+        ${entity.table.entityName} ${entity.table.entityName?uncap_first}=new ${entity.table.entityName}();
        try {
-           return mapper.get${entity.table.entityName}(vo);
+        <#if entity.ormType??>
+            <#if entity.ormType=="mybatis-plus">
+                QueryWrapper<${entity.table.entityName}> wrapper=new QueryWrapper<>();
+                ${entity.table.entityName?uncap_first}=this.mapper.selectOne(wrapper);
+            </#if>
+        </#if>
        } catch (Exception e) {
-         e.printStackTrace();
+         	e.printStackTrace();
+			throw e;
     }
-       return null;
+       return ${entity.table.entityName?uncap_first};
     }
-
-    @Override
-    public Integer get${entity.table.entityName}Count(${entity.table.entityName} vo) {
-       try {
-          return mapper.get${entity.table.entityName}Count(vo);
-       } catch (Exception e) {
-         e.printStackTrace();
-       }
-        return 0;
-    }
+  </#if>
 </#if>
 }

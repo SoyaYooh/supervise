@@ -1,12 +1,6 @@
 package com.linkcheers.supervise.file.util;
 
-import com.linkcheers.supervise.file.dto.BatchAttach;
-import com.linkcheers.supervise.file.service.IBatchAttachService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -24,15 +18,13 @@ public class FileClient {
 	 *
 	 * @param  file  文件
 	 * @param  localPath 本地路径
-	 * @param  fileName 文件名称
 	 * @throws Exception
 	 */
-	public static String uploadFile(MultipartFile file, String localPath, String fileName) throws IOException {
-		String result = "";
+	public static String uploadFile(MultipartFile file, String localPath) throws IOException {
+		String fileName="";
+		String result="";
 		if (!file.isEmpty()) {
-			if(StringUtils.isBlank(fileName)){
-				 fileName = rename(file.getOriginalFilename());
-			}
+			fileName = rename(file.getOriginalFilename());
 			File savedFile = new File(localPath, fileName);
 			boolean isCreateSuccess;
 			try {
@@ -41,13 +33,17 @@ public class FileClient {
 					file.transferTo(savedFile);
 				} else {
 					result = "请修改文件名,重新上传";
+					return result;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				throw e;
 			}
 		} else {
 			result = "文件不能为空";
+			return result;
 		}
+		result=fileName;
 		return result;
 	}
 

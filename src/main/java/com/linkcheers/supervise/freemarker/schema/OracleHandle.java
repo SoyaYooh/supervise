@@ -111,7 +111,7 @@ public class OracleHandle implements DataSourceHandle, InitializingBean {
 				cloumns.setComment(rs.getString("comment"));
 				cloumns.setIsKey(rs.getString("isKey"));
 				cloumns.setNotNull(rs.getString("notNull"));
-				cloumns.setComments(rs.getString("comments"));
+				//cloumns.setComments(rs.getString("comments"));
 				cloumns.setFieldName(Convert.fieldToProperty(rs.getString("columnName")));
 				cloumns.setFieldType(Convert.processTypeOracleConvert(rs.getString("dataType")).getType());
 				cloumns.setJdbcType(Convert.processTypeJdbcConvert(rs.getString("dataType")).getType());

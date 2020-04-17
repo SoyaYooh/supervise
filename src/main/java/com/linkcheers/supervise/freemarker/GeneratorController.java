@@ -29,7 +29,7 @@ public class GeneratorController {
 	 */
 	@RequestMapping("/generateCode")
 	@ResponseBody
-	public ResultMsg generateCode(Condition condition) {
+	public ResultMsg generateCode(@RequestBody Condition condition) {
 		ResultMsg result = new ResultMsg();
 		Map<String, Object> root = new HashMap<String, Object>();
 		try {
@@ -38,14 +38,14 @@ public class GeneratorController {
 			condition.setPackageName(condition.getPackageName());
 			condition.setAuthor(condition.getAuthor());
 			condition.setDate(condition.getDate());
-			Table table = strategy.getTableCloumns(condition.getTableName());
+	/*		Table table = strategy.getTableCloumns(condition.getTableName());
 			if(table.getCloumns().size()==0){
 				result.setCode(1);
 				result.setStatus(false);
 				result.setMsg("不存在该表，请核查表名!");
 				return result;
 			}
-			condition.setTable(table);
+			condition.setTable(table);*/
 			root.put("entity", condition);
 			new Generator().loadTemplate(root);
 			result.setCode(1);

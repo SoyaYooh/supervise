@@ -127,7 +127,7 @@ public abstract class BaseController<T> {
 	public ResultMsg upload(MultipartFile file) {
 		ResultMsg result = new ResultMsg();
 		try {
-			FileClient.uploadFile(file, uploadPath, file.getName());
+			FileClient.uploadFile(file, uploadPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setStatus(false);

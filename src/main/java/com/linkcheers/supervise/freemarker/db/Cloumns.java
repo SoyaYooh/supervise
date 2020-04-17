@@ -1,5 +1,7 @@
 package com.linkcheers.supervise.freemarker.db;
 
+import java.util.List;
+
 /**
  * @author bxk
  */
@@ -8,10 +10,6 @@ public class Cloumns {
 	 * 数据库字段名称
 	 */
 	private String columnName;
-	/**
-	 * 条件规则
-	 */
-	private String ruleCondition;
 	/**
 	 * 对象字段名
 	 */
@@ -43,7 +41,7 @@ public class Cloumns {
 	/**
 	 * 描述
 	 */
-	private String comments;
+	private List<String> rule;
 
 	public String getColumnName() {
 		return columnName;
@@ -51,14 +49,6 @@ public class Cloumns {
 
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
-	}
-
-	public String getRuleCondition() {
-		return ruleCondition;
-	}
-
-	public void setRuleCondition(String ruleCondition) {
-		this.ruleCondition = ruleCondition;
 	}
 
 	public String getFieldName() {
@@ -117,11 +107,11 @@ public class Cloumns {
 		this.notNull = notNull;
 	}
 
-	public String getComments() {
-		return comments;
+	public List<String> getRule() {
+		return rule;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setRule(List<String> rule) {
+		this.rule = rule;
 	}
 }

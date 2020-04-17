@@ -10,6 +10,7 @@ import ${entity.packageName}.dto.${entity.table.entityName};
 import ${entity.packageName}.service.I${entity.table.entityName}Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 <#if entity.ormType??>
     <#if entity.ormType=="mybatis"||entity.ormType=="jpa">
 import java.util.UUID;
@@ -33,23 +34,36 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  */
 
 @RestController
-@RequestMapping("/${entity.table.entityName} ")
+@RequestMapping("/${entity.table.entityName}")
+<#if entity.isSwagger?exists>
+	<#if entity.isSwagger=="Y">
+        <#if entity.table.tableComments?exists>
+@Api(tags = {"${entity.table.tableComments}"})
+        </#if>
+	</#if>
+</#if>
+@Slf4j
 public class ${entity.table.entityName}Controller{
 	@Autowired
 	private I${entity.table.entityName}Service service;
-
+<#if entity.method??>
+	<#if entity.method?contains("add")>
     /**
 	 * 新增
 	 * @return
 	 */
 	@RequestMapping("/add${entity.table.entityName}")
     @ResponseBody
+		<#if entity.isSwagger?exists>
+			<#if entity.isSwagger=="Y">
+                <#if entity.table.tableComments?exists>
+   	@ApiOperation("新增${entity.table.tableComments}")
+                </#if>
+			</#if>
+		</#if>
 	public ResultMsg add${entity.table.entityName}(${entity.table.entityName} vo){
 		ResultMsg result = new ResultMsg();
 		try {
-<#if entity.dataSourceType=="Oracle">
-            vo.setId(UUID.randomUUID().toString());
-</#if>
 	        service.add${entity.table.entityName}(vo);
             result.setCode(true);
             result.setMsg("新增成功！");
@@ -61,13 +75,21 @@ public class ${entity.table.entityName}Controller{
 		}
 		return result;
 	}
-
+    </#if>
+	<#if entity.method?contains("delete")>
      /**
 	 * 删除
 	 * @return
 	 */
 	@RequestMapping("/remove${entity.table.entityName}")
     @ResponseBody
+		<#if entity.isSwagger?exists>
+			<#if entity.isSwagger=="Y">
+                <#if entity.table.tableComments?exists>
+   	@ApiOperation("删除${entity.table.tableComments}")
+                </#if>
+			</#if>
+		</#if>
 	public ResultMsg remove${entity.table.entityName}(${entity.table.entityName} vo){
 		ResultMsg result = new ResultMsg();
 		try {
@@ -82,28 +104,8 @@ public class ${entity.table.entityName}Controller{
 		}
 		return result;
 	}
-
-
-     /**
-	 * 修改
-	 * @return
-	 */
-	@RequestMapping("/edit${entity.table.entityName}")
-    @ResponseBody
-	public ResultMsg edit${entity.table.entityName}(${entity.table.entityName} vo){
-		ResultMsg result = new ResultMsg();
-		try {
-	        service.edit${entity.table.entityName}(vo);
-            result.setCode(true);
-            result.setMsg("修改成功！");
-		} catch (Exception e) {
-			e.printStackTrace();
-            result.setCode(false);
-            result.setMsg("修改失败！");
-            return result;
-		}
-		return result;
-	}
+  </#if>
+	<#if entity.method?contains("query")>
     /**
 	 * 查询
 	 *
@@ -111,14 +113,19 @@ public class ${entity.table.entityName}Controller{
 	 */
 	@RequestMapping("/get${entity.table.entityName}List")
 	@ResponseBody
-	public ResultMsg get${entity.table.entityName}List(${entity.table.entityName} vo,Pageable pageable) {
+		<#if entity.isSwagger?exists>
+			<#if entity.isSwagger=="Y">
+                <#if entity.table.tableComments?exists>
+   	@ApiOperation("查询${entity.table.tableComments}")
+                </#if>
+			</#if>
+		</#if>
+	public ResultMsg get${entity.table.entityName}List(${entity.table.entityName} vo,Page page) {
         ResultMsg result=new ResultMsg();
         try {
-          Page<${entity.table.entityName}> page = service.get${entity.table.entityName}List(vo,pageable);
-          page.forEach(a->{
-            //TODO:转义
-           });
-          result.setData(page != null ? page.toPageInfo() : new PageInfo<>());
+          IPage<${entity.table.entityName}> ${entity.table.entityName?uncap_first}List = service.get${entity.table.entityName}List(vo,page);
+          result.setData(${entity.table.entityName?uncap_first}List);
+          //result.setData(page != null ? page.toPageInfo() : new PageInfo<>());
          } catch (Exception e) {
           e.printStackTrace();
 	      result.setCode(false);
@@ -127,4 +134,6 @@ public class ${entity.table.entityName}Controller{
          }
        return result;
     }
+	</#if>
+</#if>
 }

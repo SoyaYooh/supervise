@@ -12,6 +12,7 @@
     <script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
     <script type="text/javascript" src="../js/bootstrap/bootstrap.js"></script>
     <script type="text/javascript" src="../js/bootstrap/bootstrap-select.js"></script>
+    <script type="text/javascript" src="../js/bootstrap/bootstrap3-typeahead.js"></script>
     <script type="text/javascript" src="../js/layer/layer.js"></script>
     <style>
         .mytable_button_div {
@@ -38,13 +39,15 @@
 
         .form_pro {
             font-size: 14px;
-            color: rgb(51, 51, 51);
+            color: rgb(35, 20, 32);
             border-collapse: collapse;
             width: 100%;
             border-color: rgb(200, 199, 204);
             margin: 0px;
         }
-
+        .hero-unit{
+            background-image: linear-gradient(to right,rgb(0, 76, 82), rgb(11, 171, 169));
+        }
         /*新表格样式*/
         .new_tab {
             border-collapse: collapse;
@@ -126,7 +129,7 @@
                     <tr>
                         <th class="form_head">数据库类型：</th>
                         <td class="input-prepend input-append">
-                            <select class="input-block-level" name="dataSourceType" id="dataSourceType">
+                            <select class="input-block-level" name="dataSourceType" id="dataSourceType" style="width: 155%;">
                                 <option value="Oracle">==请选择==</option>
                                 <option value="Oracle">Oracle</option>
                                 <option value="Mysql">Mysql</option>
@@ -153,68 +156,50 @@
                         </td>
                         <th class="form_head">表名：</th>
                         <td class="input-prepend input-append">
-                            <input type="text" class="input-block-level" name="tableName" value="">
+                            <input type="text" class="input-block-level typeahead" name="tableName" data-provide="typeahead">
                             <span class="add-on iconfont icon-biaoge"></span>
                         </td>
                     </tr>
                     <tr>
-                        <!--         <th class="form_head">开发框架：</th>
-                                 <td class="">
-                                     <select class="input-block-level" name="frameType">
-                                         <option value="standard">标准结构</option>
-                                         <option value="tree">树结构</option>
-                                         <option value="original" selected>原始结构</option>
-                                     </select>
-                                  <span class="add-on iconfont icon-mn_kuangjia_fill"></span>
-                                 </td>
-         -->
-
                         <th class="form_head">包名：</th>
                         <td class="input-prepend input-append">
                             <input type="text" class="input-block-level" name="packageName">
                             <span class="add-on iconfont icon-caidan"></span>
                         </td>
                         <th class="form_head">持久层框架：</th>
+                    <!--    <td class="input-prepend input-append">
+                            <input type="text" class="input-block-level" name="userName">
+                            <span class="add-on iconfont icon-package"></span>
+                        </td>-->
                         <td class="input-prepend input-append">
-                            <select class="input-block-level" id="ormType" name="ormType">
-                                <option value="Mybatis">==请选择==</option>
-                                <option value="Mybatis">Mybatis</option>
-                                <option value="Mybatis-plus">Mybatis-plus</option>
-                                <option value="Jpa">Jpa</option>
+                            <select class="input-block-level" id="ormType" name="ormType" style="width: 150%;">
+                                <option value="mybatis-plus">==请选择==</option>
+                                <option value="mybatis">Mybatis</option>
+                                <option value="mybatis-plus">Mybatis-plus</option>
+                                <option value="jpa">Jpa</option>
                             </select>
-                            <span class="add-on iconfont icon-fenggepeizhi"></span>
+                            <span class="add-on iconfont icon-package"></span>
                         </td>
                         <th class="form_head">方法：</th>
                         <td class="">
-                            <select id="select" name="select" class="selectpicker input-block-level" multiple
+                            <select id="method" name="select" class="selectpicker input-block-level" multiple
                                     data-live-search="true" data-actions-box="true">　　
                                 <option value="mvc">MVC</option>
-                                　　
                                 <option value="query">查询</option>
-                                　
                                 <option value="add">新增</option>
                                 <option value="delete">删除</option>
-                                <option value="importFun">导入</option>
+                                <option value="import">导入</option>
                             </select>
                         </td>
-                        <!--   <th class="form_head">页面风格：</th>
-                           <td class="">
-                               <select class="input-block-level" name="styleType">
-                                   <option value="">不生成页面</option>
-                                   <option value="style3">增删改</option>
-                                   <option value="style1">多面板</option>
-                                   <option value="style0">工单流程</option>
-                               </select>
-                             <span class="add-on iconfont icon-fenggepeizhi"></span>
-                           </td>-->
-                        <!--      <th class="form_head">菜单选择：</th>
-                              <td class="">
-                                  <button type="button" class="input-block-level" style="cursor: pointer ;border: hidden"
-                                          name="" id="menu-choose">
-                                      <label id="menuNmae"></label>
-                                      <i class="fa fa-compass" style="float: right" aria-hidden="true"></i>
-                                  </button>
-                              </td>-->
+                        <th class="form_head">开发框架：</th>
+                        <td class="">
+                            <select class="input-block-level" name="frameType">
+                                <option value="standard">==选择==</option>
+                                <option value="standard">标准结构</option>
+                                <option value="tree">树结构</option>
+                                <option value="original" selected>原始结构</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th class="form_head">是否需要生成路径：</th>
@@ -237,11 +222,10 @@
                         </td>
                         <th class="form_head">swagger</th>
                         <td class="">
-                            <select class="input-block-level" id="swagger" name="swagger">
+                            <select class="input-block-level" id="isSwagger" name="isSwagger">
                                 <option value="Y">==选择==</option>
                                 <option value="Y">是</option>
                                 <option value="N">否</option>
-                                n>
                             </select>
                         </td>
                         <th class="form_head">作者：</th>
@@ -249,44 +233,6 @@
                             <input type="text" class="input-block-level" name="author">
                             <span class="add-on iconfont icon-zuozhe"></span>
                         </td>
-                        <!-- <th class="form_head">方法：</th>
-                         <td class="">
-                             <select id="select" name="select" class="selectpicker input-block-level" multiple data-live-search="true" data-actions-box="true">　　
-                                 <option value="mvc">MVC</option>　　
-                                 <option value="query">查询</option>　
-                                 <option value="add">新增</option>
-                                 <option value="delete">删除</option>
-                                 <option value="importFun">导入</option>
-                             </select>
-                         </td>
-                         <th class="form_head">数据库类型：</th>
-                         <td class="">
-                             <select class="input-block-level" name="dbType">
-                                 <option value="">==选择==</option>
-                                 <option value="Oracle">Oracle</option>
-                                 <option value="Mysql">Mysql</option>
-                                 <option value="SqlServer">SqlServer</option>
-                                 <option value="MongoDB">MongoDB</option>
-                             </select>
-                         </td>
-                         <th class="form_head">DB名称：</th>
-                         <td class="">
-                             <select class="input-block-level" name="dbName">
-                                 <option value="">==选择==</option>
-                                 <option value="default">默认</option>
-                                 <option value="master">主数据库</option>
-                                 <option value="slave">从数据库</option>
-                             </select>
-                         </td>
-                         <th class="form_head">持久层框架：</th>
-                         <td class="">
-                             <select class="input-block-level" name="OrmType">
-                                 <option value="">==选择==</option>
-                                 <option value="default">Spring JPA</option>
-                                 <option value="Mybatis">Mybatis</option>
-                                 <option value="springTemplate">springTemplate</option>
-                             </select>
-                         </td>-->
                     </tr>
                     <tr>
                         <th class="form_head">增加附件：</th>
@@ -294,18 +240,18 @@
                             <input type="checkbox" class="input-block-level" name="enableAttach">
                         </td>
 
-                        <th class="form_head">增加工作流：</th>
+                  <!--      <th class="form_head">增加工作流：</th>
                         <td class="">
                             <input type="checkbox" class="input-block-level" name="enableWorkflow">
-                        </td>
+                        </td>-->
                     </tr>
                 </table>
-                <input type="hidden" name="dbName" value="default">
-                <input type="hidden" name="menuId">
+                <input type="hidden" name="dbName" >
+                <input type="hidden" name="menuId" style="display: none">
             </form>
             <div class="clear" style="margin-bottom:2px;"></div>
             <div class="mytable_button_div" id="mytable_button_div">
-                <ul class="mytable_button">
+                <ul class="mytable_button" style="color: #ffffff;">
                     <li id="queryBtn"><i class="iconfont icon-jiexicanshu"></i><span>解析</span></li>
                     <li id="editBtn"><i class="iconfont icon-weibiaoti46"></i><span>生成</span></li>
                     <li id="allSelectBtn"><i class="iconfont icon-total_selection"></i><span>全选</span></li>
@@ -317,25 +263,25 @@
 
                 </table>
                 <div class="mycontent x-grid-content">
-                    <input type="text"  name="entityName"  >
-                    <input type="text"  name="tableComments" >
+                    <input type="text"  name="entityName" style="display: none" >
+                    <input type="text"  name="tableComments" style="display: none">
                     <table class="ftable x-table-body new_tab" id="mytable-content">
                         <thead>
                         <tr>
                             <td>字段</td>
-                            <td>名称</td>
+                          <!--  <td>名称</td>-->
                             <td>描述</td>
                             <td>等于=</td>
                             <td>不等!=</td>
                             <td>大于>=</td>
                             <td>小于<=</td>
                             <td>like</td>
+                            <td>likeRight</td>
+                            <td>likeLeft</td>
                             <td>not like</td>
-                            <td>in</td>
-                            <td>not in</td>
-                            <td>值是否为空</td>
+                            <td>为空</td>
+                            <td>不为空</td>
                             <td>是否排序</td>
-                       <!--     <td>数据字典</td>-->
                         </tr>
                         </thead>
                         <tbody id="grid">
@@ -349,26 +295,34 @@
 </div>
 </body>
 <script>
-    function setSizes() {
-        var $el = $('.mycontent');
-        var bottom = $(window).height() - $('#queryForm').outerHeight(true) - $('.mytable_button_div').outerHeight(true) - 20;
-        $el.css({'height': '' + bottom + 'px'});
-    }
-
     $(document).ready(function () {
-        $('.selectpicker').selectpicker({
-            'selectedText': 'cat'
+        var url = "120.27.144.145:1521:ORCL";
+        var userName = "supervision";
+        var passWord = "lq_supervision";
+        var tableName = $('input[name="tableName"]').val();
+        var tableComments;
+        var entityName;
+        var tableName;
+        $('input[name="tableName"]').typeahead({
+            source: function (query, process) {
+                return $.ajax({
+                    url:  "http://localhost:8080/generator/getAllTableName",
+                    type: 'post',
+                    data: {
+                        url:url,
+                        userName:userName,
+                        passWord:passWord,
+                        dataSourceType:$('#dataSourceType option:selected') .val()
+                    },
+                    success: function (result) {
+                        return process(result.data);
+                    },
+                });
+            }
         });
-        setSizes();
         $("#queryBtn").click(function () {
             debugger;
             var msg;
-            /*          var url = $('input[name="url"]').val();
-                      var userName = $('input[name="userName"]').val();
-                      var passWord = $('input[name="passWord"]').val();*/
-            var url = "120.27.144.145:1521:ORCL";
-            var userName = "supervision";
-            var passWord = "lq_supervision";
             var tableName = $('input[name="tableName"]').val();
             var dataSourceType=$('#dataSourceType option:selected') .val();//选中的值
             var data = {
@@ -379,7 +333,7 @@
                 dataSourceType:dataSourceType
             }
             $.ajax({
-                url: "http://127.0.0.1:8080/generator/getTableInfo",
+                url: "http://localhost:8080/generator/getTableInfo",
                 type: "POST",
                 dataType: "JSON",
                 cache: false,  //不缓存
@@ -388,22 +342,28 @@
                 success: function (result, textStatus, jqXHR) {
                     var data = result.data.cloumns;
                     $('#mytable-content tbody').html("");
-                    $('input[name="tableComments"]').val(result.data.tableComments);
-                    $('input[name="entityName"]').val(result.data.entityName);
+                    tableComments=result.data.tableComments;
+                    entityName=result.data.entityName;
+                    tableName=result.data.tableName;
                     for (var i = 0; i < data.length; i++) {
-                        item = "<tr><td>" + data[i].columnName + "</td><td>" + data[i].fieldName + "</td>" +
+                        item = "<tr><td>" + data[i].columnName + "</td>" +
+                            "<td style='display: none'>" + data[i].fieldName + "</td>" +
                             "<td>"+ data[i].comment+"</td>" +
-                            "<td>"+ data[i].comment+"</td>" +
-                            "<td>"+ data[i].comment+"</td>" +
+                            "<td style='display: none'>"+ data[i].dataType+"</td>" +
+                            "<td style='display: none'>"+ data[i].fieldType+"</td>" +
+                            "<td style='display: none'>"+ data[i].isKey+"</td>" +
+                            "<td style='display: none'>"+ data[i].notNull+"</td>" +
+                            "<td style='display: none'>"+ data[i].jdbcType+"</td>" +
                             "<td class='x-table-td'><input type='checkbox' value='true' name='eq'></td>" +
                             "<td class='x-table-td'><input type='checkbox' value='true' name='ne'></td>" +
                             "<td class='x-table-td'><input type='checkbox' value='true' name='ge'></td>" +
                             "<td class='x-table-td'><input type='checkbox' value='true' name='le'></td>" +
                             "<td class='x-table-td'><input type='checkbox' value='true' name='like'></td>" +
-                            "<td class='x-table-td'><input type='checkbox' value='true' name='nlike'></td>" +
-                            "<td class='x-table-td'><input type='checkbox' value='true' name='in'></td>" +
-                            "<td class='x-table-td'><input type='checkbox' value='true' name='nin'></td>" +
-                            "<td class='x-table-td'><input type='checkbox' value='true' name='isnull'></td>" +
+                            "<td class='x-table-td'><input type='checkbox' value='true' name='likeRight'></td>" +
+                            "<td class='x-table-td'><input type='checkbox' value='true' name='likeLeft'></td>" +
+                            "<td class='x-table-td'><input type='checkbox' value='true' name='notLike'></td>" +
+                            "<td class='x-table-td'><input type='checkbox' value='true' name='isNull'></td>" +
+                            "<td class='x-table-td'><input type='checkbox' value='true' name='isNotNull'></td>" +
                             "<td class='x-table-td'><input type='checkbox' value='true' name='sort'></td>" +
                            /* "<td class='x-table-td'><input type='text' name='dictDefined' style='border-style: none;' ></td>" +*/
                             "</tr>";
@@ -441,56 +401,49 @@
         });
 
         $("#editBtn").click(function () {
-            var obj = document.getElementsByName('eq');
-            var demand = '';
- /*           for (var i = 0; i < obj.length; i++) {
-                if (obj[i].checked) {
-                    demand += obj[i].name + ',';//如果选中，将value添加到变量s中
-                }
-            }*/
-            alert(demand);
-            var tab=document.getElementById("grid");
+            debugger;
             var trList = $("#mytable-content").children("tbody").children("tr");
             var paramsArr = new Array();
             for (var i=0;i<trList.length;i++){
                 params = {};
+                var condition = new Array();
                 var tdArr = trList.eq(i).find("td");
                 var columnName = tdArr.eq(0).text();//
                 var fieldName = tdArr.eq(1).text();//
                 var comment = tdArr.eq(2).text();//  comment
-                var eq = tdArr.eq(3).find('input').is(':checked')==true?'eq':null;//是否起用
-                var ne = tdArr.eq(4).find('input').is(':checked')==true?'ne':null;//是否起用
-                var ge = tdArr.eq(5).find('input').is(':checked')==true?'ge':null;//是否起用
-                var le = tdArr.eq(6).find('input').is(':checked')==true?'le':null;//是否起用
-                var like = tdArr.eq(7).find('input').is(':checked')==true?'like':null;//是否起用
-                var notLike = tdArr.eq(8).find('input').is(':checked')==true?'notLike':null;//是否起用
-                var In = tdArr.eq(9).find('input').is(':checked')==true?'in':null;//是否起用
-                var notIn = tdArr.eq(10).find('input').is(':checked')==true?'notIn':null;//是否起用
-                var isNull = tdArr.eq(11).find('input').is(':checked')==true?'isNull':null;//是否起用
-                var sort = tdArr.eq(12).find('input').is(':checked')==true?'sort':null;//是否起用
-                var condition = new Array();
-                condition.push(eq,ne,ge,le,like,notLike,In,notIn,isNull,sort);
+                var dataType = tdArr.eq(3).text();//  comment
+                var fieldType = tdArr.eq(4).text();//  comment
+                var isKey=tdArr.eq(5).text();//  comment
+                var notNull=tdArr.eq(6).text();//  comment
+                var jdbcType= tdArr.eq(7).text();//  comment
+                for (var j = 0; j< tdArr.length; j++) {
+                    var ip=tdArr.eq(j).find('input');
+                    if(ip.is(':checked')==true){
+                        condition.push(ip.attr("name"));
+                    }
+                }
                 params.columnName=columnName;
                 params.fieldName=fieldName;
                 params.comment=comment;
-                params.ruleCondition=condition;
+                params.dataType=dataType;
+                params.fieldType=fieldType;
+                params.rule=condition;
+                params.isKey=isKey;
+                params.notNull=notNull;
+                params.jdbcType=jdbcType;
                 paramsArr.push(params);
             }
             var msg;
             var packageName = $('input[name="packageName"]').val();
             var isFilePath =  $('#isFilePath option:selected') .val();
             var isLombok = $('#isLombok option:selected') .val();
+            var isSwagger=$('#isSwagger option:selected') .val();
+            var method= $('#method').selectpicker('val')!=null?$('#method').selectpicker('val').toString():"";
             var ormType=$('#ormType option:selected') .val();//选中的值
             var author = $('input[name="author"]').val();
             var tableName = $('input[name="tableName"]').val();
-            var entityName = $('input[name="entityName"]').val();
-            var tableComments = $('input[name="tableComments"]').val();
-
-            var url = "120.27.144.145:1521:ORCL";
-            var userName = "supervision";
-            var passWord = "lq_supervision";
-            var tableName = $('input[name="tableName"]').val();
             var dataSourceType=$('#dataSourceType option:selected') .val();//选中的值
+            var frameType=$('#frameType option:selected') .val();
             var data = {
                 "url": url,
                 "userName": userName,
@@ -502,14 +455,19 @@
                 "isLombok": isLombok,
                 "ormType": ormType,
                 "author": author,
+                "isSwagger":isSwagger,
+                "method":method,
+                "frameType":frameType,
                 "table":{
                     "tableName":tableName,
-                   "entityName":entityName,
-                    "tableComments":tableComments
+                    "entityName":entityName,
+                    "tableComments":tableComments,
+                    "cloumns":paramsArr
                 }
-            }
+            };
+            var  datadd=    JSON.stringify(data);
             $.ajax({
-                url: 'http://127.0.0.1:8080/generator/generateCode',
+                url: 'http://localhost:8080/generator/generateCode',
                 type: "POST",
                 dataType: "JSON",
                 cache: false,  //不缓存
