@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 /**
  * @author ${entity.author}
- * @date ${entity.date}
+ * @date   ${.now}
  */
 @Repository
 public interface ${entity.table.entityName}Repository extends JpaRepository<${entity.table.entityName},Long>{

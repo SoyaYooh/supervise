@@ -8,16 +8,17 @@ import com.github.pagehelper.Page;
 import org.springframework.data.domain.Pageable;
 	</#if>
 	<#if entity.ormType=="mybatis-plus">
-import ${entity.packageName}.dto.${entity.table.entityName}Mapper;
+import ${entity.packageName}.mapper.${entity.table.entityName}Mapper;
 import com.linkcheers.supervise.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 	</#if>
 </#if>
+import java.util.List;
 import ${entity.packageName}.dto.${entity.table.entityName};
 /**
  * @author ${entity.author}
- * @date ${entity.date}
+ * @date   ${.now}
  * @description
  */
 public  interface I${entity.table.entityName}Service<#if entity.ormType??><#if entity.ormType=="mybatis-plus"> extends IService<${entity.table.entityName},${entity.table.entityName}Mapper></#if></#if>{
@@ -25,27 +26,33 @@ public  interface I${entity.table.entityName}Service<#if entity.ormType??><#if e
 	<#if entity.method?contains("add")>
     /**
 	 * 新增<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>接口
-	 * @param  vo
+	 * @param  ${entity.table.entityName?uncap_first}
 	 * @return
 	 */
-	void add${entity.table.entityName}(${entity.table.entityName} vo);
+	void add${entity.table.entityName}(${entity.table.entityName} ${entity.table.entityName?uncap_first});
     </#if>
 	<#if entity.method?contains("delete")>
 	/**
 	 * 删除<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>接口
-	 * @param  vo
+	 * @param  ${entity.table.entityName?uncap_first}
 	 * @return
 	 */
-	void remove${entity.table.entityName}(${entity.table.entityName} vo);
+	void remove${entity.table.entityName}(${entity.table.entityName} ${entity.table.entityName?uncap_first});
 	</#if>
 	<#if entity.method?contains("query")>
    /**
 	 * 查询<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>列表接口
-	 * @param  vo
-     * @param  pageable
+	 * @param  ${entity.table.entityName?uncap_first}
+     * @param  page
 	 * @return
     */
-   Page<${entity.table.entityName}> get${entity.table.entityName}List(${entity.table.entityName} vo,Page page);
+   IPage<${entity.table.entityName}> get${entity.table.entityName}Page(${entity.table.entityName} ${entity.table.entityName?uncap_first},Page page);
+	 /**
+	 * 查询<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>列表接口
+	 * @param  ${entity.table.entityName?uncap_first}
+	 * @return
+    */
+   List<${entity.table.entityName}> get${entity.table.entityName}List(${entity.table.entityName} ${entity.table.entityName?uncap_first});
 	 /**
 	 * 查询<#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>接口
 	 * @param  vo

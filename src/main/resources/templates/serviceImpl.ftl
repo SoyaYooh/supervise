@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ${entity.packageName}.dto.${entity.table.entityName};
 import ${entity.packageName}.mapper.${entity.table.entityName}Mapper;
 import ${entity.packageName}.service.I${entity.table.entityName}Service;
+import org.apache.commons.lang3.StringUtils;
 <#if entity.ormType??>
     <#if entity.ormType=="mybatis"||entity.ormType=="jpa">
         <#if entity.ormType=="mybatis">
@@ -23,7 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 </#if>
 /**
  * @author ${entity.author}
- * @date ${entity.date}
+ * @date   ${.now}
  * @description
  */
 @Service
@@ -35,8 +36,7 @@ public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-
 	@Override
 	public void add${entity.table.entityName}(${entity.table.entityName} vo) {
 		try {
-
-            if(vo.getId()){
+            if(StringUtils.isNotBlank(vo.getId())){
         <#if entity.ormType??>
             <#if entity.ormType=="mybatis-plus">
                 this.mapper.insert(vo>);
@@ -49,13 +49,13 @@ public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-
             	UpdateWrapper<${entity.table.entityName}> updateWrapper = new UpdateWrapper<>();
                 <#list entity.table.cloumns as cloumns>
                     <#if cloumns.columnName??>
-                if(StringUtils.isNotBlank(vo.get${cloumns.fieldName}())){
-                        ${entity.table.entityName?uncap_first}.set${cloumns.fieldName}(vo.get${cloumns.fieldName}());
+                if(<#if cloumns.fieldType!='String'>vo.get${cloumns.fieldName?cap_first}()!=null</#if><#if cloumns.fieldType=='String'>StringUtils.isNotBlank(vo.get${cloumns.fieldName?cap_first}())</#if>){
+                        ${entity.table.entityName?uncap_first}.set${cloumns.fieldName?cap_first}(vo.get${cloumns.fieldName?cap_first}());
                  }
                     </#if>
                 </#list>
-				updateWrapper.eq("ID", smsSportCheck.getId());
-                this.mapper.update(vo>);
+				updateWrapper.eq("ID", vo.getId());
+                this.mapper.update(vo);
             </#if>
         </#if>
             }
@@ -67,11 +67,11 @@ public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-
    </#if>
     <#if entity.method?contains("delete")>
 	@Override
-	public void remove${entity.table.entityName}(${entity.table.entityName} vo) {
+	public void remove${entity.table.entityName}(${entity.table.entityName} ${entity.table.entityName?uncap_first}) {
 		try {
         <#if entity.ormType??>
             <#if entity.ormType=="mybatis-plus">
-                ${entity.table.entityName?uncap_first}=this.mapper.delete(new QueryWrapper<${entity.table.entityName}>());
+              this.mapper.delete(new QueryWrapper<${entity.table.entityName}>());
             </#if>
         </#if>
 		} catch (Exception e) {
@@ -82,7 +82,7 @@ public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-
     </#if>
     <#if entity.method?contains("query")>
 	@Override
-	public IPage<${entity.table.entityName}> get${entity.table.entityName}List(${entity.table.entityName} vo,Page page) {
+	public IPage<${entity.table.entityName}> get${entity.table.entityName}Page(${entity.table.entityName} ${entity.table.entityName?uncap_first},Page page) {
      IPage<${entity.table.entityName}> IPage;
        try {
         <#if entity.ormType??>
@@ -91,8 +91,8 @@ public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-
                 <#list entity.table.cloumns as cloumns>
                     <#if cloumns.rule??>
                         <#list cloumns.rule as rule>
-                        if(StringUtils.isNotBlank(vo.get${cloumns.fieldName}())){
-                          wrapper.${rule}("${cloumns.columnName}",vo.get${cloumns.fieldName}());
+                        if(StringUtils.isNotBlank(${entity.table.entityName?uncap_first}.get${cloumns.fieldName?cap_first}())){
+                          wrapper.${rule}("${cloumns.columnName}",${entity.table.entityName?uncap_first}.get${cloumns.fieldName?cap_first}());
                         }
                         </#list>
                     </#if>
@@ -116,8 +116,41 @@ public class ${entity.table.entityName}ServiceImpl<#if entity.ormType=="mybatis-
       return IPage;
     }
     @Override
-    public ${entity.table.entityName} get${entity.table.entityName}(${entity.table.entityName} vo) {
-        ${entity.table.entityName} ${entity.table.entityName?uncap_first}=new ${entity.table.entityName}();
+	public List<${entity.table.entityName}> get${entity.table.entityName}List(${entity.table.entityName} ${entity.table.entityName?uncap_first}) {
+     List<${entity.table.entityName}> ${entity.table.entityName?uncap_first}List=new ArrayList<>();
+       try {
+        <#if entity.ormType??>
+            <#if entity.ormType=="mybatis-plus">
+            QueryWrapper<${entity.table.entityName}> wrapper=new QueryWrapper<>();
+                <#list entity.table.cloumns as cloumns>
+                    <#if cloumns.rule??>
+                        <#list cloumns.rule as rule>
+                        if(StringUtils.isNotBlank(${entity.table.entityName?uncap_first}.get${cloumns.fieldName?cap_first}())){
+                          wrapper.${rule}("${cloumns.columnName}",${entity.table.entityName?uncap_first}.get${cloumns.fieldName?cap_first}());
+                        }
+                        </#list>
+                    </#if>
+                </#list>
+                <#list entity.table.cloumns as cloumns>
+                    <#if cloumns.rule??>
+                        <#list cloumns.rule as rule>
+                            <#if rule=='sort'>
+            wrapper.orderBy("${cloumns.columnName}");
+                            </#if>
+                        </#list>
+                    </#if>
+                </#list>
+                ${entity.table.entityName?uncap_first}List=this.mapper.selectList(wrapper);
+            </#if>
+        </#if>
+       } catch (Exception e) {
+          	e.printStackTrace();
+			throw e;
+       }
+      return ${entity.table.entityName?uncap_first}List;
+    }
+    @Override
+    public ${entity.table.entityName} get${entity.table.entityName}(${entity.table.entityName} ${entity.table.entityName?uncap_first}) {
        try {
         <#if entity.ormType??>
             <#if entity.ormType=="mybatis-plus">

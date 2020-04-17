@@ -13,7 +13,9 @@ import lombok.Data;
 import io.swagger.annotations.ApiModelProperty;
     </#if>
 </#if>
-import java.util.Date;
+<#if entity.method?contains("export")>
+import cn.afterturn.easypoi.excel.annotation.Excel;
+</#if>
 <#if entity.ormType??>
 <#if entity.ormType=="jpa">
 import org.hibernate.annotations.GenericGenerator;
@@ -27,6 +29,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 </#if>
 </#if>
+import java.util.Date;
 /**
  * @author ${entity.author}
  * @date   ${.now}
@@ -61,7 +64,7 @@ public class ${entity.table.entityName}<#if entity.frameType?exists><#if entity.
 	@GeneratedValue(generator = "uuid")
             </#if>
             <#if entity.ormType=="mybatis-plus">
-   @TableId(value = "${property.columnName}",type= IdType.UUID)
+    @TableId(value = "${property.columnName}",type= IdType.UUID)
             </#if>
         </#if>
     </#if>
@@ -79,6 +82,9 @@ public class ${entity.table.entityName}<#if entity.frameType?exists><#if entity.
         <#if entity.isSwagger=="Y">
     @ApiModelProperty(value = "${property.columnName}")
         </#if>
+    </#if>
+    <#if entity.method?contains("export")>
+    @Excel(name="${property.comment}")
     </#if>
     private ${property.fieldType} ${property.fieldName};
 </#list>

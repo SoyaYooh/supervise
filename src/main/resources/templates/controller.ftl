@@ -1,5 +1,6 @@
 package ${entity.packageName};
 
+import com.linkcheers.supervise.controller.BaseController;
 import com.common.dto.ResultMsg;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +28,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
     </#if>
 </#if>
+<#if entity.method?contains("export")>
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+</#if>
 /**
  * @author ${entity.author}
- * @date ${entity.date}
+ * @date   ${.now}
  * @description
  */
 
@@ -43,7 +53,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 	</#if>
 </#if>
 @Slf4j
-public class ${entity.table.entityName}Controller{
+public class ${entity.table.entityName}Controller extends BaseController{
 	@Autowired
 	private I${entity.table.entityName}Service service;
 <#if entity.method??>
@@ -134,6 +144,48 @@ public class ${entity.table.entityName}Controller{
          }
        return result;
     }
+	</#if>
+	<#if entity.method?contains("export")>
+	/**
+	 * 导出Excel文件
+	 */
+	@RequestMapping(value = "/doExport")
+	@ResponseBody
+		<#if entity.isSwagger?exists>
+			<#if entity.isSwagger=="Y">
+				<#if entity.table.tableComments?exists>
+   	@ApiOperation("导出${entity.table.tableComments}")
+				</#if>
+			</#if>
+		</#if>
+	public void doExport(${entity.table.entityName} vo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try {
+			//查询条数
+	        List<${entity.table.entityName}> result = service.get${entity.table.entityName}List(vo);
+			int importNum = result.getSize();
+			Workbook workbook = null;
+			ExportParams exportParams = new ExportParams(" <#if entity.table.tableComments?exists>${entity.table.tableComments}</#if>", "导出");
+			if (importNum > EXPORT_MAX) {
+				for (int i = 0; i < importNum / EXPORT_MAX + 1; i++) {
+					workbook = ExcelExportUtil.exportBigExcel(exportParams, ${entity.table.entityName}.class, result);
+					result.clear();
+				}
+				ExcelExportUtil.closeExportBigExcel();
+			} else {
+				workbook = ExcelExportUtil.exportExcel(exportParams,${entity.table.entityName}.class, result);
+			}
+			String filename = "(" + DateUtil.getExcelDate(new Date()) + ")";
+			renderExcel(request, response, filename, workbook);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setContentType("text/html;charset=utf-8");
+			try {
+				response.getWriter().write(e.getMessage());
+			} catch (Exception e2) {
+
+			}
+		}
+	}
 	</#if>
 </#if>
 }

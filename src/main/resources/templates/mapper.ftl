@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * @author ${entity.author}
- * @date ${entity.date}
+ * @date   ${.now}
  * @description
  */
 @Mapper

@@ -1,5 +1,7 @@
 package com.linkcheers.supervise.freemarker.db;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+
 import java.util.List;
 
 /**
@@ -9,37 +11,45 @@ public class Cloumns {
 	/**
 	 * 数据库字段名称
 	 */
+	@Excel(name="数据库字段名称")
 	private String columnName;
 	/**
 	 * 对象字段名
 	 */
+	@Excel(name="对象字段名")
 	private String fieldName;
 	/**
 	 * 数据库字段类型
 	 */
+	@Excel(name="数据库字段类型")
 	private String dataType;
 	/**
 	 * 对象字段类型
 	 */
+	@Excel(name="对象字段类型")
 	private String fieldType;
 	/**
 	 * jdbc类型
 	 */
+	@Excel(name="jdbc类型")
 	private String jdbcType;
 	/**
 	 * 数据库字段描述
 	 */
+	@Excel(name="数据库字段描述")
 	private String comment;
 	/**
 	 * 是否主键
 	 */
+	@Excel(name="是否主键")
 	private String isKey;
 	/**
 	 * 是否不为空
 	 */
+	@Excel(name="是否不为空")
 	private String notNull;
 	/**
-	 * 描述
+	 * 规则
 	 */
 	private List<String> rule;
 

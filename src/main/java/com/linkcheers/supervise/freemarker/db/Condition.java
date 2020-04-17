@@ -20,10 +20,6 @@ public class Condition {
 	 */
 	private String author;
 	/**
-	 * 创建时间,默认为当前时间
-	 */
-	private String date;
-	/**
 	 * 表名称
 	 */
 	private String tableName;
@@ -88,14 +84,6 @@ public class Condition {
 
 	public void setAuthor(String author) {
 		this.author = author;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
 	}
 
 	public String getTableName() {
@@ -163,10 +151,6 @@ public class Condition {
 	}
 
 	public Condition() {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		formatter.format(new Date());
-		this.date = formatter.format(new Date());
-		this.isLombok = "N";
 	}
 
 	public String getIsSwagger() {

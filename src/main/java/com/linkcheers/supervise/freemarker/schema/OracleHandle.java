@@ -2,6 +2,7 @@ package com.linkcheers.supervise.freemarker.schema;
 import com.linkcheers.supervise.freemarker.db.Cloumns;
 import com.linkcheers.supervise.freemarker.db.Convert;
 import com.linkcheers.supervise.freemarker.db.Table;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
@@ -22,13 +23,18 @@ public class OracleHandle implements DataSourceHandle, InitializingBean {
 	private static Connection con = null;
 	private static DatabaseMetaData dbmd = null;
 
-
 	@Override
 	public void init(String url, String user, String pw) {
 		try {
-			DATABASE_URL = DATABASE_URL_PREFIX + url;
-			DATABASE_USER = user;
-			DATABASE_PASSWORD = pw;
+			if(StringUtils.isNotBlank(url)){
+				DATABASE_URL = DATABASE_URL_PREFIX + url;
+			}
+			if(StringUtils.isNotBlank(user)){
+				DATABASE_USER = user;
+			}
+			if(StringUtils.isNotBlank(pw)){
+				DATABASE_PASSWORD = pw;
+			}
 			Class.forName(DRIVER_CLASS);
 			con = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
 			dbmd = con.getMetaData();

@@ -189,6 +189,7 @@
                                 <option value="add">新增</option>
                                 <option value="delete">删除</option>
                                 <option value="import">导入</option>
+                                <option value="export">导出</option>
                             </select>
                         </td>
                         <th class="form_head">开发框架：</th>
@@ -252,6 +253,7 @@
             <div class="clear" style="margin-bottom:2px;"></div>
             <div class="mytable_button_div" id="mytable_button_div">
                 <ul class="mytable_button" style="color: #ffffff;">
+                    <li id="doExport"><i class="iconfont icon-jiexicanshu"></i><span>导出</span></li>
                     <li id="queryBtn"><i class="iconfont icon-jiexicanshu"></i><span>解析</span></li>
                     <li id="editBtn"><i class="iconfont icon-weibiaoti46"></i><span>生成</span></li>
                     <li id="allSelectBtn"><i class="iconfont icon-total_selection"></i><span>全选</span></li>
@@ -300,9 +302,9 @@
         var userName = "supervision";
         var passWord = "lq_supervision";
         var tableName = $('input[name="tableName"]').val();
+        var dataSourceType=$('#dataSourceType option:selected') .val();//选中的值
         var tableComments;
         var entityName;
-        var tableName;
         $('input[name="tableName"]').typeahead({
             source: function (query, process) {
                 return $.ajax({
@@ -312,7 +314,7 @@
                         url:url,
                         userName:userName,
                         passWord:passWord,
-                        dataSourceType:$('#dataSourceType option:selected') .val()
+                        dataSourceType:dataSourceType
                     },
                     success: function (result) {
                         return process(result.data);
@@ -495,6 +497,11 @@
                 }
             });
 
+        });
+        $("#doExport").click(function () {
+            debugger;
+            var tableName = $('input[name="tableName"]').val();
+            window.location.href='http://localhost:8080/generator/doExport?url='+url+'&userName='+userName+'&passWord='+passWord+'&tableName='+tableName+ '&dataSourceType='+dataSourceType;
         });
     });
 

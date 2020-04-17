@@ -76,48 +76,6 @@ public abstract class BaseController<T> {
 	}
 
 	/**
-	 * 导出Excel文件
-	 */
-	@RequestMapping(value = "/doExport")
-	public void doExport(HttpServletRequest request, HttpServletResponse response, T t) throws Exception {
-		try {
-			/*
-			有排序的时候
-			final PageRequest page2 = new PageRequest(
-					0, 20, new Sort(
-					new Sort.Order(Sort.Direction.ASC, "lastName"),
-					new Sort.Order(Sort.Direction.DESC, "salary"))
-			);*/
-			//查询条数
-			int importNum = 200;
-			Workbook workbook = null;
-			//第一个是导出的接口
-			ExportParams exportParams = new ExportParams("", "导出");
-			if (importNum > EXPORT_MAX) {
-				for (int i = 0; i < importNum / EXPORT_MAX + 1; i++) {
-					List<T> result = new ArrayList<T>();
-					workbook = ExcelExportUtil.exportBigExcel(exportParams, t.getClass(), result);
-					result.clear();
-				}
-				ExcelExportUtil.closeExportBigExcel();
-			} else {
-				List<T> result = new ArrayList<T>();
-				workbook = ExcelExportUtil.exportExcel(exportParams, t.getClass(), result);
-			}
-			String filename = "(" + DateUtil.getExcelDate(new Date()) + ")";
-			renderExcel(request, response, filename, workbook);
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setContentType("text/html;charset=utf-8");
-			try {
-				response.getWriter().write(e.getMessage());
-			} catch (Exception e2) {
-
-			}
-		}
-	}
-
-	/**
 	 * 上传附件
 	 *
 	 * @return
